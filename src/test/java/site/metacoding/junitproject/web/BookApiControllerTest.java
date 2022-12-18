@@ -1,6 +1,6 @@
 package site.metacoding.junitproject.web;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,16 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-import site.metacoding.junitproject.service.BookService;
 import site.metacoding.junitproject.web.dto.request.BookSaveReqDto;
 
 // 통합 테스트(C, S, R)
 // 컨트롤러만 테스트하는 것이 아님
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BookApiControllerTest {
-
-    @Autowired
-    private BookService bookService;
 
     @Autowired
     private TestRestTemplate rt;
