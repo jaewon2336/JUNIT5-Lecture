@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,7 @@ import site.metacoding.junitproject.web.dto.request.BookSaveReqDto;
 
 // 통합 테스트(C, S, R)
 // 컨트롤러만 테스트하는 것이 아님
+@ActiveProfiles("dev")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BookApiControllerTest {
 
@@ -132,5 +134,30 @@ public class BookApiControllerTest {
         Integer code = dc.read("$.code");
 
         assertThat(code).isEqualTo(1);
+    }
+
+    @Sql("classpath:db/tableInit.sql")
+    @Test
+    public void updateBook_test() throws Exception {
+        // given
+        Long id = 1L;
+
+        BookSaveReqDto bookSaveReqDto = new BookSaveReqDto();
+        bookSaveReqDto.setTitle("spring");
+        bookSaveReqDto.setAuthor("메타코딩");
+
+        String body = om.writeValueAsString(bookSaveReqDto);
+
+        // when
+        HttpEntity<String> request = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = rt.exchange("/api/v1/book/" + id, HttpMethod.PUT, request, String.class);
+
+        // then
+        DocumentContext dc = JsonPath.parse(response.getBody());
+        String title = dc.read("$.body.title");
+        String author = dc.read("$.body.author");
+
+        assertThat(title).isEqualTo(bookSaveReqDto.getTitle());
+        assertThat(author).isEqualTo(bookSaveReqDto.getAuthor());
     }
 }
