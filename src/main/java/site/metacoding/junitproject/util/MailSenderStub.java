@@ -1,4 +1,4 @@
-package site.metacoding.util;
+package site.metacoding.junitproject.util;
 
 import org.springframework.stereotype.Component;
 
@@ -10,5 +10,4 @@ public class MailSenderStub implements MailSender {
     public boolean send() {
         return true;
     }
-
 }

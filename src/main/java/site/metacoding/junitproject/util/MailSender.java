@@ -1,4 +1,4 @@
-package site.metacoding.util;
+package site.metacoding.junitproject.util;
 
 public interface MailSender {
     boolean send();
